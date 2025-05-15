@@ -3,6 +3,7 @@ import { assert } from 'chai';
 import { fetchApi } from '../fetchApi'
 import { components } from "./../types/petstore"
 
+
 type Pet = components["schemas"]["Pet"];
 
 @binding()

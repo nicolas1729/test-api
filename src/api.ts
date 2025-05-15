@@ -1,11 +1,13 @@
 import { components, paths } from "./types/petstore"
-
+import { createPathBasedClient } from "openapi-fetch";
+import { fetchApi } from './fetchApi'
 
 console.log("test");
 (async ()=> {
     const response = await fetch("https://petstore3.swagger.io/api/v3/pet/10");
     const pet = await response.json();
-    console.log(pet.name)
+    console.log(pet.name);
+    demo();
 })()
 
 type PickDefined<Object> = Pick<Object, {[key in keyof Object]: Object[key] extends undefined ? never : key}[keyof Object]>
@@ -33,18 +35,24 @@ type SuccessResponseBody<P> = P extends {responses: {"200": {"application/json":
 type QueryParameters<Endpoint> = Endpoint extends {parameters: {query: object}} ? Endpoint["parameters"]["query"] : undefined
 type PathParameters<Endpoint> = Endpoint extends {parameters: {path: object}} ? Endpoint["parameters"]["path"] : undefined
 
-export async function fetchApi <Path extends keyof paths, Method extends keyof paths[Path]>(path: Path, options: FetchOptions<Method, QueryParameters<paths[Path][Method]>, PathParameters<paths[Path][Method]>>): 
+export async function fetchApi2 <Path extends keyof paths, Method extends keyof paths[Path]>(path: Path, options: FetchOptions<Method, QueryParameters<paths[Path][Method]>, PathParameters<paths[Path][Method]>>): 
 Promise<SuccessResponse<paths[Path][Method]>> {
     return await fetch(path, options).then(res => res.json());
 }
 
 
-async function demo() {
-    const data = await fetchApi("/pet/{petId}", {method: "get", params: {petId: 123}});
-}
 
-async function demo2() {
-    const data = await fetchApi("/pet/findByStatus", {method: "get"});
+async function demo() {
+
+    //const dataFetchApi2 = await fetchApi2("/pet/{petId}", {method: "get", params: {petId: 123}});
+    const dataFetchApi = await fetchApi("https://petstore3.swagger.io/api/v3", "/pet/{petId}", {method: "get", params: {petId: 4}});
+
+    const client = createPathBasedClient<paths>({
+        baseUrl: "https://petstore3.swagger.io/api/v3/",
+    });
+    const { data, error, response } = await client["/pet/{petId}"].GET({params: {path: { petId: 4 }}});
+
+    
 }
 
 
