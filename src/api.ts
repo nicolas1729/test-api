@@ -4,11 +4,34 @@ import { fetchApi } from './fetchApi'
 
 console.log("test");
 (async ()=> {
-    const response = await fetch("https://petstore3.swagger.io/api/v3/pet/10");
-    const pet = await response.json();
-    console.log(pet.name);
-    demo();
+
+    //classic
+    const response2 = await fetch("https://petstore3.swagger.io/api/v3/pet/10");
+    const pet = await response2.json();
+
+    //fetchApi
+    type Category = components["schemas"]["Category"];
+    const dataFetchApi = await fetchApi("/pet/{petId}", {method: "get", params: {petId: 4}});
+    let category:Category;
+    if(dataFetchApi.category) {
+        category = dataFetchApi.category;
+    }
+
+    //open-api
+    const client = createPathBasedClient<paths>({
+        baseUrl: "https://petstore3.swagger.io/api/v3/",
+    });
+    const { data:components, error, response } = await client["/pet/{petId}"].GET({params: {path: { petId: 4 }}});
 })()
+
+
+
+
+
+
+
+
+
 
 type PickDefined<Object> = Pick<Object, {[key in keyof Object]: Object[key] extends undefined ? never : key}[keyof Object]>
 type QueryParameter<Endpoint> = Endpoint extends {parameters: {query:object}} ? Endpoint["parameters"]["query"] : undefined
@@ -39,20 +62,3 @@ export async function fetchApi2 <Path extends keyof paths, Method extends keyof 
 Promise<SuccessResponse<paths[Path][Method]>> {
     return await fetch(path, options).then(res => res.json());
 }
-
-
-
-async function demo() {
-
-    //const dataFetchApi2 = await fetchApi2("/pet/{petId}", {method: "get", params: {petId: 123}});
-    const dataFetchApi = await fetchApi("https://petstore3.swagger.io/api/v3", "/pet/{petId}", {method: "get", params: {petId: 4}});
-
-    const client = createPathBasedClient<paths>({
-        baseUrl: "https://petstore3.swagger.io/api/v3/",
-    });
-    const { data, error, response } = await client["/pet/{petId}"].GET({params: {path: { petId: 4 }}});
-
-    
-}
-
-

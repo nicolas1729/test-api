@@ -27,5 +27,5 @@ type PathParameters<Endpoint> = Endpoint extends {
         path: object;
     };
 } ? Endpoint["parameters"]["path"] : undefined;
-export declare function fetchApi<Path extends keyof paths, Method extends keyof paths[Path]>(path: Path, options: FetchOptions<Method, QueryParameters<paths[Path][Method]>, PathParameters<paths[Path][Method]>>): Promise<SuccessResponse<paths[Path][Method]>>;
+export declare function fetchApi2<Path extends keyof paths, Method extends keyof paths[Path]>(path: Path, options: FetchOptions<Method, QueryParameters<paths[Path][Method]>, PathParameters<paths[Path][Method]>>): Promise<SuccessResponse<paths[Path][Method]>>;
 export {};

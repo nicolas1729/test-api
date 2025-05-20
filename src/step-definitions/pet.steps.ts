@@ -19,7 +19,7 @@ export class BankAccountSteps {
 
   @when(/get pet/)
   public async get() {
-    const response = await fetchApi("https://petstore3.swagger.io/api/v3", "/pet/{petId}", {method: "get", params: {petId: this.petId}});
+    const response = await fetchApi("/pet/{petId}", {method: "get", params: {petId: this.petId}});
     this.pet = response;
   }
 

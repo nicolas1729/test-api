@@ -1,6 +1,5 @@
 import { binding, given, then, when} from 'cucumber-tsflow';
 import { assert } from 'chai';
-import { fetchApi } from '../api'
 
 @binding()
 export class BankAccountSteps {

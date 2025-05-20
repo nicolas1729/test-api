@@ -1,4 +1,6 @@
-import { components, paths } from "./types/petstore"
+import { paths } from "./types/petstore"
+
+const URL = "https://petstore3.swagger.io/api/v3";
 /**
  * Utility types
  */
@@ -68,7 +70,6 @@ export type FetchOptions<Path, Method> = RequestInit & {
   >;
 
 export function fetchApi<Path extends Paths, Method extends Methods = "get">(
-  baseUrl: string,
   path: Path,
   options?: FetchOptions<Path, Method>
 ): Promise<ApiResponse<Path, Method>> {
@@ -83,7 +84,7 @@ export function fetchApi<Path extends Paths, Method extends Methods = "get">(
   };
   const query = o.query;
   const params = o.params;
-  let url = baseUrl + path;
+  let url = URL + path;
   o.headers["Accept"] = "application/json";
   // Si on a une clef json, alors la requête aura un body json
   if (o.json) {
